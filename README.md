@@ -15,4 +15,5 @@ The parser only supports the following types
 type=camera - requires fov,near,far fields to parse.
 ----MeshRenderer is next to be added
 
+Quick note - you may notice the camera test line contains a parent variable, this will be added later on, and will be used to choose what GameObject in the list the component will be added to.
 
