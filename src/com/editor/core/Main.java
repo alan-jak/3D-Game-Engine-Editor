@@ -10,8 +10,7 @@ public class Main
         // runs init method of StringPhaser
         StringPhaser.init();
 
-        while (editor)
-            StringPhaser.update();
+        StringPhaser.parseGameObject();
     }
 
 }
