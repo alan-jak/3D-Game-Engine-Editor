@@ -13,13 +13,14 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import com.editor.wysiwygEngine.base.components.GameComponent;
 import com.editor.wysiwygEngine.base.core.CoreEngine;
 import com.editor.wysiwygEngine.base.core.GameObject;
 
 
-public class HeirarchyFrame
+public class HierarchyFrame
 {
-	static JInternalFrame internalFrame = new JInternalFrame("Engine Heirarchy", true, false, false);
+	static JInternalFrame internalFrame = new JInternalFrame("Engine Hierarchy", true, false, false);
 	static JTree tree = new JTree();
 	static DefaultTreeModel model = new DefaultTreeModel(new DefaultMutableTreeNode("Game") {
 															private static final long serialVersionUID = 1L;
@@ -59,7 +60,7 @@ public class HeirarchyFrame
                     int selRow = tree.getRowForLocation(e.getX(), e.getY());
                     TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
                     if(selRow != -1) {
-                    	if(e.getClickCount() == 2) {
+                    	if(e.getClickCount() == 2 && isGameObject((DefaultMutableTreeNode)tree.getLastSelectedPathComponent())) {
                     		ObjectInfoFrame frameTAdd = new ObjectInfoFrame();
                     		synchronized(infoFrames)
                     		{
@@ -105,11 +106,17 @@ public class HeirarchyFrame
 		
 		model.reload(root);
 		tree.setModel(model);
+		tree.setCellRenderer(new HierarchyNodeRenderer());
 	}
 	
 	public static DefaultMutableTreeNode addToHeirarchy(DefaultMutableTreeNode currentNode, GameObject obj)
 	{
-		DefaultMutableTreeNode myNode = new DefaultMutableTreeNode(obj.getName());
+		DefaultMutableTreeNode myNode = new DefaultMutableTreeNode(obj.getName() + " <GameObject>");
+		
+		for(GameComponent gc : obj.getComponents())
+		{
+			myNode.add(new DefaultMutableTreeNode(gc.getClass().getSimpleName() + " <GameComponent>"));
+		}
 		
 		for(GameObject object : obj.getChildren())
 		{
@@ -118,4 +125,14 @@ public class HeirarchyFrame
 		
 		return myNode;
 	}
+	
+	 private static boolean isGameObject(DefaultMutableTreeNode node)
+	 {
+        String title = (String) node.getUserObject();
+        if (title.indexOf("<GameObject>") >= 0) {
+            return true;
+        }
+
+        return false;
+    }
 }

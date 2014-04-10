@@ -118,5 +118,9 @@ public class GameObject
 	{
 		return name;
 	}
+
+	public ArrayList<GameComponent> getComponents() {
+		return components;
+	}
 	
 }

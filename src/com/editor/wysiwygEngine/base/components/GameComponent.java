@@ -25,4 +25,5 @@ public abstract class GameComponent
 	}
 	
 	public void addToEngine(CoreEngine engine){}
+	
 	}

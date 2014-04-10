@@ -2,7 +2,7 @@ package com.editor.wysiwygEngine.base.core;
 
 import java.awt.Canvas;
 
-import com.editor.gui.main.HeirarchyFrame;
+import com.editor.gui.main.HierarchyFrame;
 import com.editor.wysiwygEngine.base.rendering.RenderingEngine;
 import com.editor.wysiwygEngine.base.rendering.Window;
 
@@ -73,7 +73,7 @@ public class CoreEngine
 		double lastTime = Time.getTime();
 		double unprocessedTime = 0;
 		
-		HeirarchyFrame.updateHeirarchyTree(game.getRootObject());
+		HierarchyFrame.updateHeirarchyTree(game.getRootObject());
 		
 		while(isRunning)
 		{

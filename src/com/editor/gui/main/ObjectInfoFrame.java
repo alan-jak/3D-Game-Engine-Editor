@@ -29,21 +29,27 @@ public class ObjectInfoFrame
 	public JInternalFrame createInfoFrame(final JFrame frame, String objName, GameObject rootObj)
     {
 		
-		String name = null;
+		String name = "";
+		
+		if(objName.endsWith(" <GameObject>"))
+		{
+			objName = objName.substring(0, objName.length() - 13);
+		}
 		
 		int index = 0;
 		boolean instantClose = false;
 		synchronized(rootObj.getAllAttached())
 		{
-			while(name != objName && index < rootObj.getAllAttached().size())
+			while(!name.equals(objName) && index < rootObj.getAllAttached().size())
 			{
 				objForInfo = rootObj.getAllAttached().get(index);
 				name = objForInfo.getName();
 				index++;
 			}
 		}
-		if(objName != name)
+		if(!objName.equals(name))
 		{
+			System.out.println("Name not found");
 			instantClose = true;
 		}
 		else

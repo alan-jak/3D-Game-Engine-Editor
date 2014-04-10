@@ -17,7 +17,7 @@ public class test {
 
         frame.setContentPane(desktop);
 
-        desktop.add(HeirarchyFrame.createHeirarchyFrame(frame));
+        desktop.add(HierarchyFrame.createHeirarchyFrame(frame));
         desktop.add(BasicFrames.createEngineFrame(frame));
         desktop.add(BasicFrames.createInfoFrame(frame));
     }
