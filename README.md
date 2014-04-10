@@ -6,8 +6,8 @@ The current file format is called a planet scene file or .planet file, made to f
 
 --Layout--
 Each line should contain a tag, it does not matter where it is placed, as long as it's on the line. Valid tags are
-<GO> - States this line should be treated as a GameObject, requires x,y and z position values on line.
-<GC> - States this line is a component and requires type parameter
+\<GO\> - States this line should be treated as a GameObject, requires x,y and z position values on line.
+\<GC\> - States this line is a component and requires type parameter
 
 --GameComponent types--
 The parser only supports the following types
