@@ -36,6 +36,8 @@ public class HierarchyFrame
 	 */
 	public static JInternalFrame createHeirarchyFrame(final JFrame frame)
     {
+		BasicFrames.removeDropdown(internalFrame);
+		
         internalFrame.setVisible(true);
         internalFrame.setBounds(200, 200, 518, 352);
         internalFrame.setFocusable(true);

@@ -59,6 +59,9 @@ public class ObjectInfoFrame
 		
     	final JInternalFrame internalFrame = new JInternalFrame("Info: " + objName, false, true, false);
 
+    	BasicFrames.removeDropdown(internalFrame);
+    	BasicFrames.metroStyleTitlebar(internalFrame);
+    	
         internalFrame.setVisible(!instantClose);
         internalFrame.setBounds(200, 200, 490, 210);
         internalFrame.setFocusable(true);

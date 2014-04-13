@@ -5,6 +5,8 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.WindowConstants;
 
+import com.editor.gui.themes.NimbusMetrofier;
+
 public class test {
 	final static JFrame frame = new JFrame("Unitor 3D Game Engine Editor");
 	
@@ -21,6 +23,8 @@ public class test {
             }
         } catch (Exception e) {
         }
+        
+        NimbusMetrofier.metrofy();
         
         JFrame.setDefaultLookAndFeelDecorated(true);
 

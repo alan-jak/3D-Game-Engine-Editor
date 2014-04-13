@@ -2,6 +2,9 @@ package com.editor.gui.main;
 import java.awt.Canvas;
 import java.beans.PropertyVetoException;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.SwingConstants;
@@ -11,21 +14,24 @@ import com.editor.wysiwygEngine.game.TestGame;
 
 import javax.swing.JLabel;
 
+import java.awt.Container;
 import java.awt.Desktop;
 import java.awt.Font;
 
 import javax.swing.JEditorPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 public class BasicFrames
 {
 	public static JInternalFrame createEngineFrame(final JFrame frame)
     {
     	final JInternalFrame internalFrame = new JInternalFrame("WYSIWYG Engine View", true, false, true);
-
-        
-
+    	
+    	removeDropdown(internalFrame);
+    	metroStyleTitlebar(internalFrame);
+    	
         internalFrame.setVisible(true);
         internalFrame.setLocation(30,30);
         internalFrame.setBounds(40, 40, 200, 150);
@@ -71,8 +77,9 @@ public class BasicFrames
     {
     	final JInternalFrame internalFrame = new JInternalFrame("About Unitor", false, true, false);
 
-        
-
+    	removeDropdown(internalFrame);
+    	metroStyleTitlebar(internalFrame);
+    	
         internalFrame.setVisible(true);
         internalFrame.setBounds(200, 200, 518, 352);
         internalFrame.setFocusable(true);
@@ -93,7 +100,7 @@ public class BasicFrames
         txtpnUnitorIsA.setContentType("text/html");
         txtpnUnitorIsA.setEditable(false);
         txtpnUnitorIsA.setBorder(null);  
-        txtpnUnitorIsA.setText("<style>\r\n\tbody\r\n\t\t{\r\n\t\t\tfont-family:Tahoma, Geneva, sans-serif;\r\n\t\t\tbackground-color:#d6d9df;\r\n\t\t\tborder:0px solid #FFFFFF\r\n\t\t}\r\n</style>\r\n<body>\r\nUnitor is a powerful 3D editor interface for the open source 3D Game Engine series by thebennybox/BennyQBD available from <a href='http://github.com/BennyQBD/3DGameEngine'>github.com/BennyQBD/3DGameEngine</a> <br/>\r\nDid you know this editor is also open source? Get the source at <a href='http://github.com/Kiwuser/3D-Game-Engine-Editor'>github.com/Kiwuser/3D-Game-Engine-Editor</a><br/>\r\nThis project is maintained by Kiwuser<br/>\r\n<a rel=\"license\" href=\"http://creativecommons.org/licenses/by/4.0/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"http://i.creativecommons.org/l/by/4.0/88x31.png\" /></a><br /><span xmlns:dct=\"http://purl.org/dc/terms/\" href=\"http://purl.org/dc/dcmitype/InteractiveResource\" property=\"dct:title\" rel=\"dct:type\">Unitor</span> is licensed under a <a rel=\"license\" href=\"http://creativecommons.org/licenses/by/4.0/\">Creative Commons Attribution 4.0 International License</a>.<br />Based on a work at <a xmlns:dct=\"http://purl.org/dc/terms/\" href=\"http://github.com/Kiwuser/3D-Game-Engine-Editor\" rel=\"dct:source\">http://github.com/Kiwuser/3D-Game-Engine-Editor</a>.\r\n</body>");
+        txtpnUnitorIsA.setText("<style>\r\n\tbody\r\n\t\t{\r\n\t\t\tfont-family:Tahoma, Geneva, sans-serif;\r\n\t\t\tborder:0px solid #FFFFFF;\r\n\t\t\tbackground-color:#FFFFFF;\r\n\t\t}\r\n</style>\r\n<body>\r\nUnitor is a powerful 3D editor interface for the open source 3D Game Engine series by thebennybox/BennyQBD available from <a href='http://github.com/BennyQBD/3DGameEngine'>github.com/BennyQBD/3DGameEngine</a> <br/>\r\nDid you know this editor is also open source? Get the source at <a href='http://github.com/Kiwuser/3D-Game-Engine-Editor'>github.com/Kiwuser/3D-Game-Engine-Editor</a><br/>\r\nThis project is maintained by Kiwuser<br/>\r\n<a rel=\"license\" href=\"http://creativecommons.org/licenses/by/4.0/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"http://i.creativecommons.org/l/by/4.0/88x31.png\" /></a><br /><span xmlns:dct=\"http://purl.org/dc/terms/\" href=\"http://purl.org/dc/dcmitype/InteractiveResource\" property=\"dct:title\" rel=\"dct:type\">Unitor</span> is licensed under a <a rel=\"license\" href=\"http://creativecommons.org/licenses/by/4.0/\">Creative Commons Attribution 4.0 International License</a>.<br />Based on a work at <a xmlns:dct=\"http://purl.org/dc/terms/\" href=\"http://github.com/Kiwuser/3D-Game-Engine-Editor\" rel=\"dct:source\">http://github.com/Kiwuser/3D-Game-Engine-Editor</a>.\r\n</body>");
         txtpnUnitorIsA.setBounds(10, 54, 482, 227);
         txtpnUnitorIsA.addHyperlinkListener(new HyperlinkListener() {
             @Override
@@ -126,4 +133,43 @@ public class BasicFrames
         canvas.setVisible(true);
         return canvas;
     }
+	
+	public static void removeDropdown(JInternalFrame internalFrame)
+	{
+		BasicInternalFrameUI ui = (BasicInternalFrameUI)internalFrame.getUI();
+    	Container north = (Container)ui.getNorthPane();
+    	north.remove(0);
+    	north.validate();
+    	north.repaint();
+	}
+	
+	static ImageIcon close = new  ImageIcon("./res/editorImg/close.png");
+	static ImageIcon closeHighlighted = new  ImageIcon("./res/editorImg/closeHighlight.png");
+	static ImageIcon closePressed = new  ImageIcon("./res/editorImg/closeClicked.png");
+	static ImageIcon max = new  ImageIcon("./res/editorImg/maximise.png");
+	static ImageIcon maxHighlighted = new  ImageIcon("./res/editorImg/maximiseHighlight.png");
+	static ImageIcon maxPressed = new  ImageIcon("./res/editorImg/maximiseClick.png");
+	
+	public static void metroStyleTitlebar(JInternalFrame internalFrame)
+	{
+		JComponent     title = ((BasicInternalFrameUI)internalFrame.getUI()).getNorthPane();
+	    for (int i = 0; i < title.getComponentCount(); i++) {
+	        JComponent component = (JComponent)title.getComponent(i);
+	        if(component instanceof JButton) {
+	            JButton button = ((JButton)component);
+	            if(button.getName() == null) continue;
+	            if(button.getName().endsWith("closeButton")) {
+	                button.setIcon(close);
+	                button.setSelectedIcon(closeHighlighted);
+	                button.setPressedIcon(closePressed);
+	            }
+	            else if(button.getName().endsWith("maximizeButton")) {
+	            	button.setIcon(max);
+	                button.setSelectedIcon(maxHighlighted);
+	                button.setPressedIcon(maxPressed);
+	            }
+	        }
+	    }
+	    
+	}
 }
