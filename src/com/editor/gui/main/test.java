@@ -1,17 +1,22 @@
 package com.editor.gui.main;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
 import javax.swing.JDesktopPane;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.WindowConstants;
-
 import com.editor.gui.themes.NimbusMetrofier;
 
 public class test {
 	final static JFrame frame = new JFrame("Unitor 3D Game Engine Editor");
+	public static String filename = "./res/game/gameFile.planet";
 	
     public static void main(String[] args) {
-
+    	
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
         try {
@@ -26,6 +31,41 @@ public class test {
         
         NimbusMetrofier.metrofy();
         
+        showFileChooser();
+    }
+    
+    	public static void showFileChooser()
+    	{
+    		final JFrame chooseFrame = new JFrame("Select a Scene to Open");
+            
+            JFrame.setDefaultLookAndFeelDecorated(true);
+
+            chooseFrame.setSize(808, 486);
+            chooseFrame.getContentPane().setLayout(null);
+            
+            final JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setBounds(0, 0, 792, 408);
+            chooseFrame.getContentPane().add(fileChooser);
+            fileChooser.setControlButtonsAreShown(false);
+            fileChooser.setFileFilter(new PlanetFileFilter( "planet", "Planet Scene File"));
+            fileChooser.setAcceptAllFileFilterUsed(false);
+            
+            JButton btnOpenScene = new JButton("Open Scene");
+            btnOpenScene.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent arg0) {
+            		if(fileChooser.getSelectedFile() != null)
+            			filename = fileChooser.getSelectedFile().getAbsolutePath();
+            		beginEditor();
+            		chooseFrame.setVisible(false);
+            	}
+            });
+            btnOpenScene.setBounds(664, 414, 122, 28);
+            chooseFrame.getContentPane().add(btnOpenScene);
+            chooseFrame.setVisible(true);
+    	}
+    
+    public static void beginEditor()
+    {
         JFrame.setDefaultLookAndFeelDecorated(true);
 
         frame.setSize(1280, 720);

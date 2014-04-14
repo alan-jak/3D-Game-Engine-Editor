@@ -10,7 +10,7 @@ public class TextureResource
 
 	public TextureResource()
     {
-		this.id = glGenTextures();;
+		this.id = glGenTextures();
     	this.refCount = 1;
     }
     

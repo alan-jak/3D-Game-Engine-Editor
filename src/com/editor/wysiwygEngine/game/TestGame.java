@@ -18,6 +18,7 @@ import com.editor.wysiwygEngine.base.rendering.Mesh;
 import com.editor.wysiwygEngine.base.rendering.Texture;
 import com.editor.wysiwygEngine.base.rendering.Vertex;
 import com.editor.wysiwygEngine.base.rendering.Window;
+import com.editor.wysiwygEngine.planetParser.GameCreator;
 
 public class TestGame extends Game
 {
@@ -114,6 +115,7 @@ public class TestGame extends Game
         addObject(pointLightObject);
         addObject(spotLightObject);
         addObject(new GameObject("Cam Object").addComponent(new Camera((float)Math.toRadians(80), (float)Window.getWidth()/(float)Window.getHeight(), 0.01f, 1000.0f)).addComponent(new FreeLook(1)).addComponent(new FreeMove(8)));
+        new GameCreator("./res/game/gameFile.planet").createGame();
 	}
 	
 }

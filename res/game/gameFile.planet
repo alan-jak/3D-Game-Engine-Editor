@@ -1,0 +1,4 @@
+<GO> x=0 y=2 z=0
+<GO> x=0 y=2 z=4
+<GC> type=camera parent=0 fov=80 near=0.01 far=1000
+<GC> type=meshRenderer mPath="./res/models/monkey3.obj" tPath="./res/textures/test.png" parent=1

@@ -10,6 +10,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.SwingConstants;
 
 import com.editor.wysiwygEngine.base.core.CoreEngine;
+import com.editor.wysiwygEngine.game.GeneratedGame;
 import com.editor.wysiwygEngine.game.TestGame;
 
 import javax.swing.JLabel;
@@ -61,6 +62,7 @@ public class BasicFrames
         frame.setVisible(true);
         new Thread() {
         	public void run() {
+        		//CoreEngine engine = new CoreEngine(frame.getWidth(), frame.getHeight(), 60, true, new GeneratedGame());
         		CoreEngine engine = new CoreEngine(frame.getWidth(), frame.getHeight(), 60, true, new TestGame());
         		engine.createWindow("Earthengine tech demo", canvas);
         		engine.start();
@@ -73,6 +75,7 @@ public class BasicFrames
 	/**
 	 * @wbp.parser.entryPoint
 	 */
+	
 	public static JInternalFrame createInfoFrame(final JFrame frame)
     {
     	final JInternalFrame internalFrame = new JInternalFrame("About Unitor", false, true, false);

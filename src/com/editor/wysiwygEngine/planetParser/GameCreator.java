@@ -1,40 +1,74 @@
-package com.editor.core;
+package com.editor.wysiwygEngine.planetParser;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.editor.wysiwygEngine.base.components.Camera;
 import com.editor.wysiwygEngine.base.components.FreeLook;
 import com.editor.wysiwygEngine.base.components.FreeMove;
-import com.editor.wysiwygEngine.base.components.GameComponent;
+import com.editor.wysiwygEngine.base.components.MeshRenderer;
 import com.editor.wysiwygEngine.base.core.GameObject;
 import com.editor.wysiwygEngine.base.core.Vector3f;
+import com.editor.wysiwygEngine.base.rendering.Material;
+import com.editor.wysiwygEngine.base.rendering.Mesh;
+import com.editor.wysiwygEngine.base.rendering.Texture;
 import com.editor.wysiwygEngine.base.rendering.Window;
 
-public class StringPhaser
+public class GameCreator
 {
     // variables
-    private static String line;
-    private static String number;
+    private String number;
+    private String path;
 
-    private static int    t;
-    private static char   c;
+    private int    t;
+    private char   c;
 
-    private static ArrayList<GameObject> Objects = new ArrayList<GameObject>();
+    private ArrayList<GameObject> Objects = new ArrayList<GameObject>();
     
-    public static void init()
+    public GameCreator(String gamePath)
     {
-        // initialize variables
-        line = "<GO> x=100 y=20 z=09";
-        number = "";
-
-        t = 0;
-        c = ' ';
-
+    	path = gamePath;
+    	t = 0;
+    	c = ' ';
+    	
+    }
+    
+    public ArrayList<GameObject> createGame()
+    {
+    	BufferedReader br = null;
+    	 
+		try {
+ 
+			String sCurrentLine;
+ 
+			br = new BufferedReader(new FileReader(path));
+			
+			while ((sCurrentLine = br.readLine()) != null) {
+				System.out.println(sCurrentLine);
+				if(sCurrentLine.indexOf("<GO>") != -1)
+					parseGameObject(sCurrentLine + " ");
+				else if(sCurrentLine.indexOf("<GC>") != -1)
+					parseGameComponent(sCurrentLine + " ");
+			}
+ 
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+    	
+    	return Objects;
     }
 
     //Don't know why this is called update, the parser should only run once, if it breaks all of your code, sorry!
     //I renamed it to a more suitable name.
-    public static void parseGameObject()
+    private void parseGameObject(String line)
     {
 
     	float x = 0, y = 0, z = 0;
@@ -60,6 +94,7 @@ public class StringPhaser
             }
         }
         // Deal with number produced here
+        number = number.replace("null", "");
         x = Float.parseFloat(number);
         System.out.println("X: " + number);
 
@@ -125,29 +160,30 @@ public class StringPhaser
         GameObject obj = new GameObject("Object " + Objects.size() + 1);
         obj.getTransform().setPosition(new Vector3f(x, y, z));
         Objects.add(obj);
-        
-        
-        //This runs the test function parseGameComponent, eventually the parser will first detect if the line is a GameObject or GameComponent
-        parseGameComponent();
 
     }
 
-    public static void parseGameComponent()
+    private void parseGameComponent(String line)
     {
-        String line = "<GC> type=camera parent=0 fov=80 near=0.01 far=1000";
         //Check if this component is of type camera
-        int intIndex = line.indexOf("type=camera");
-        if (intIndex != -1)
+        if (line.indexOf("type=camera") != -1)
         {
             //Self explanatory
             line = line + "  ";
             System.out.println("Camera Type GameComponent Detected, parsing");
             parseCamera(line);
         }
+        else if(line.indexOf("type=meshRenderer") != -1)
+        {
+        	//Self explanatory
+            line = line + "  ";
+            System.out.println("MeshRenderer Type GameComponent Detected, parsing");
+            parseMeshRenderer(line);
+        }
 
     }
 
-    public static void parseCamera(String line)
+    private void parseCamera(String line)
     {
         int intIndex;
         int parent = 0;
@@ -246,27 +282,22 @@ public class StringPhaser
         
         Camera cam = new Camera((float)Math.toRadians(fov), (Window.getWidth()/Window.getHeight()), near, far);
         Objects.get(parent).addComponent(cam);
-        Objects.get(parent).addComponent(new FreeLook(8.0f));
-        Objects.get(parent).addComponent(new FreeMove(1.0f));
-        
-        for(GameObject go : Objects)
-        	for(GameComponent c : go.getComponents())
-        		System.out.println(c.getClass().getSimpleName());
+        Objects.get(parent).addComponent(new FreeLook(1.0f));
+        Objects.get(parent).addComponent(new FreeMove(8.0f));
     }
 
-    //Ignore this, I left it after starting it a long, long time ago, and decided to wait for the
-    //resource management segment to finish
-    public static void parseMeshRenderer(String line)
+    private void parseMeshRenderer(String line)
     {
         int intIndex;
-        intIndex = line.indexOf("path");
+        intIndex = line.indexOf("mPath=\"");
+        String tpath = "", mpath = "";
 
         if (intIndex == -1)
-            System.out.println("MeshRenderers require a path!");
+            System.out.println("MeshRenderers require a model path!");
         else
         {
-            int t = intIndex + 4;
-            char c = "a".charAt(0);
+            int t = intIndex + 7;
+            char c = ' ';
             String number = "";
 
             while (c != "\"".charAt(0))
@@ -275,49 +306,64 @@ public class StringPhaser
                 number = number + line.charAt(t);
                 if (t < line.length() - 1) t++;
             }
-            number.replace(" ", "");
+            number = number.replace(" ", "");
+            number = number.replace("\"", "");
 
-            System.out.println("Camera FOV: " + number);
+            mpath = number.replace("./res/models/", "");
+            mpath = mpath.replace(".\\res\\models\\", "");
+            System.out.println("Model Path: " + number);
 
-            intIndex = line.indexOf("near=");
+            intIndex = line.indexOf("tPath=\"");
 
             if (intIndex == -1)
-                System.out.println("Camera type GameComponents require a near setting!");
+                System.out.println("MeshRenderers require a texture path!");
             else
             {
-                t = intIndex + 5;
+            	t = intIndex + 7;
+                c = ' ';
                 number = "";
-                c = "a".charAt(0);
-                while (c != " ".charAt(0))
+
+                while (c != "\"".charAt(0))
                 {
                     c = line.charAt(t);
                     number = number + line.charAt(t);
                     if (t < line.length() - 1) t++;
                 }
-                number.replace(" ", "");
+                number = number.replace(" ", "");
+                number = number.replace("\"", "");
 
-                System.out.println("Camera NEAR: " + number);
-
-                intIndex = line.indexOf("far=");
-
-                if (intIndex == -1)
-                    System.out.println("Camera type GameComponents require a far setting!");
-                else
-                {
-                    t = intIndex + 4;
-                    number = "";
-                    c = "a".charAt(0);
-                    while (c != " ".charAt(0))
-                    {
-                        c = line.charAt(t);
-                        number = number + line.charAt(t);
-                        if (t < line.length()) t++;
-                    }
-                    number.replace(" ", "");
-
-                    System.out.println("Camera FAR: " + number);
-                }
+                tpath = number.replace("./res/textures/", "");
+                System.out.println("Texture Path: " + number);
             }
         }
+        
+        intIndex = line.indexOf("parent=");
+        int parent = 0;
+        
+        if (intIndex == -1)
+            System.out.println("Camera type GameComponents require a parent setting!");
+        else
+        {
+            t = intIndex + 7;
+            number = "";
+            c = "a".charAt(0);
+            while (c != ' ')
+            {
+                c = line.charAt(t);
+                number = number + line.charAt(t);
+                if (t < line.length()) t++;
+            }
+            number = number.replaceAll("\\s+","");
+
+            parent = Integer.parseInt(number);
+            System.out.println("MeshRenderer Parent: " + number);
+        }
+        
+        Material mat = new Material();
+        mat.addTexture("diffuse", new Texture(tpath));
+        MeshRenderer mr = new MeshRenderer(new Mesh(mpath), mat);
+        
+        Objects.get(parent).addComponent(mr);
+        
     }
 }

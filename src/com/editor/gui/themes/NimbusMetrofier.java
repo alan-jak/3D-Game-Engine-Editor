@@ -14,15 +14,15 @@ public class NimbusMetrofier
 {	
 	public static void metrofy()
 	{
-		UIManager.put("nimbusBase", Color.decode("#76608A"));
-		UIManager.put("nimbusBlueGrey", Color.decode("#647687"));
+		UIManager.getLookAndFeelDefaults().put("nimbusBase", Color.decode("#76608A"));
+		UIManager.getLookAndFeelDefaults().put("nimbusBlueGrey", Color.decode("#647687"));
 		UIManager.put("control", Color.decode("#FFFFFF"));
-		UIManager.put("InternalFrame:InternalFrameTitlePane[Enabled].textForeground", Color.decode("#F7F7F7"));		
-		UIManager.put("InternalFrame.titleFont", new Font("Segoe UI", Font.PLAIN, 12));
-		UIManager.put("InternalFrame.activeTitleBackground", Color.RED);
-		UIManager.put("defaultFont", new Font("Segoe UI", Font.PLAIN, 12));
+		UIManager.getLookAndFeelDefaults().put("InternalFrame:InternalFrameTitlePane[Enabled].textForeground", Color.decode("#F7F7F7"));		
+		UIManager.getLookAndFeelDefaults().put("InternalFrame.titleFont", new Font("Segoe UI", Font.PLAIN, 12));
+		UIManager.getLookAndFeelDefaults().put("InternalFrame.activeTitleBackground", Color.RED);
+		UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("Segoe UI", Font.PLAIN, 12));
 		
-		UIManager.put("InternalFrame[Enabled+WindowFocused].backgroundPainter", new Painter<Object>() {
+		UIManager.getLookAndFeelDefaults().put("InternalFrame[Enabled+WindowFocused].backgroundPainter", new Painter<Object>() {
 			@Override
 			public void paint(Graphics2D g, Object c, int w, int h) {
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -33,7 +33,7 @@ public class NimbusMetrofier
                 g.drawRoundRect(0, 0, w-1, h-1, 8, 8);
 			}});
 		
-		UIManager.put("InternalFrame[Enabled].backgroundPainter", new Painter<Object>() {
+		UIManager.getLookAndFeelDefaults().put("InternalFrame[Enabled].backgroundPainter", new Painter<Object>() {
 
 			@Override
 			public void paint(Graphics2D g, Object c, int w, int h) {
