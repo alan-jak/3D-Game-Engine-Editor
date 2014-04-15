@@ -1,4 +1,6 @@
 package com.editor.gui.main;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -6,9 +8,11 @@ import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JToggleButton;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.WindowConstants;
+
 import com.editor.gui.themes.NimbusMetrofier;
 
 public class test {
@@ -37,7 +41,8 @@ public class test {
     	public static void showFileChooser()
     	{
     		final JFrame chooseFrame = new JFrame("Select a Scene to Open");
-            
+            chooseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    		
             JFrame.setDefaultLookAndFeelDecorated(true);
 
             chooseFrame.setSize(808, 486);
@@ -49,6 +54,8 @@ public class test {
             fileChooser.setControlButtonsAreShown(false);
             fileChooser.setFileFilter(new PlanetFileFilter( "planet", "Planet Scene File"));
             fileChooser.setAcceptAllFileFilterUsed(false);
+            disableUglyButtons(fileChooser.getParent());
+            disableUglyButtons(fileChooser.getParent());
             
             JButton btnOpenScene = new JButton("Open Scene");
             btnOpenScene.addActionListener(new ActionListener() {
@@ -80,4 +87,18 @@ public class test {
         desktop.add(BasicFrames.createInfoFrame(frame));
     }
     
+    
+    public static void disableUglyButtons(Container c) { 
+        for (int i = 0; i < c.getComponentCount(); i++) {  
+          Component comp = c.getComponent(i);  
+          if (comp instanceof JToggleButton) {  
+        	  JToggleButton b = (JToggleButton) comp;  
+              c.remove(b);  
+          } else if (comp instanceof Container) {  
+        	  disableUglyButtons((Container) comp);  
+          }  
+        }  
+        
+         
+    } 
 }
